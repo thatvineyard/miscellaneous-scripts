@@ -41,12 +41,10 @@ handle-git() {
 	# This is a valid git repository (but the current working
 	# directory may not be the top level.
 	# Check the output of the git rev-parse command if you care)
-	echo "Valid git repo"
-	P_GIT= true
-	git pull -q --no-commit
+	run-in-temp-terminal git pull
     else
+	:
 	# this is not a git repository
-	echo "Not a git repo"
     fi    
 }
 
@@ -81,9 +79,7 @@ open-project() {
 	emacs &
 	open_terminal $P_DIR &
 	
-       	ls -l
-	
-	export PLAST_DIR=$P_DIR;
+	# export PLAST_DIR=$P_DIR;
 
     else
 	display-error $(echo "Changing directory unsuccessful, please verify that project directory exists" "Project directory:" $P_DIR)
