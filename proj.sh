@@ -72,7 +72,7 @@ open-project() {
 
 	if [ ${P_GIT}] ; then
 	    # git config --local --get remote.origin.url | xargs -I {} $BROWSER {} &
-	    ( cd $P_DIR; git pull )
+	    ( cd "${P_DIR}" ; git pull )
 	fi
 
 	ls -l
