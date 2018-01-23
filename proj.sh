@@ -1,15 +1,18 @@
 #!/bin/bash
 
-## DEPENDENCY
+### DEPENDENCY
 # display-error (included in miscellaneous scripts pack)
 # run-in-temp-terminal (included in miscellaneous scripts pack)
 
-## VARIABLES
+### VARIABLES
 P_DIR_LIST=(/home/carl/Documents/UU/AD3/AD3-Assignments/ /usr/local/bin/miscellaneous-scripts)
 NUM_PROJECTS=${#P_DIR_LIST[@]}
 BROWSER= 
 
-## FUNCTIONS
+### FUNCTIONS
+
+## display-help
+# 
 display-help() {
     echo "===================================================="
     echo "Call on a specific project number N using \"proj N\""
@@ -37,6 +40,8 @@ display-help() {
     echo "===================================================="
 }
 
+## handle-git
+#
 handle-git() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
 	# This is a valid git repository (but the current working
@@ -58,7 +63,7 @@ handle-git() {
 # This function checks the default terminal and launches it
 # accordingly. Right now will only act differently with the 
 # Tilix terminal. 
-
+#
 open_terminal() {
 
     if [ $1 ] ; then
@@ -72,7 +77,9 @@ open_terminal() {
 	esac
     fi
 }
-       
+
+## open-project
+#
 open-project() {
     P_DIR=$1
     
@@ -92,7 +99,7 @@ open-project() {
 }
 
 
-## MAIN
+### MAIN
 
 if [ $1 ] ; then
 
