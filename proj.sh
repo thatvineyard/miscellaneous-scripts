@@ -9,8 +9,14 @@ NUM_PROJECTS=${#P_DIR_LIST[@]}
 BROWSER= 
 
 ## FUNCTIONS
-display_help() {
+display-help() {
+    echo "===================================================="
     echo "Call on a specific project number N using \"proj N\""
+    echo
+    echo "To set a project directory, stand in the directory"
+    echo "and use \"proj set N\" to set that project numeber"
+    echo "directory to the current directory"
+    echo "===================================================="
     if [[ $PLAST_DIR ]] ; then
 	Call "most recently called project using \"proj 0\""
 	echo "======="
@@ -18,12 +24,16 @@ display_help() {
 	echo $PLAST_DIR
     fi
 
+    echo
+    
     for i in `seq 0 $((NUM_PROJECTS-1))`; do
-	echo "======="
-	echo "Project $i:"
-	echo ${P_DIR_LIST[$i]}
+	echo "=======" "Project $((i+1)):" "=======" 
+	echo "Directory:" ${P_DIR_LIST[$i]}
+	echo
     done
-    echo =======
+
+    echo
+    echo "===================================================="
 }
 
 open_terminal() {
@@ -78,9 +88,29 @@ open_project() {
 
 ## MAIN
 
-if [[ $1  && $1 < $NUM_PROJECTS ]]; then
-    open_project ${P_DIR_LIST[$1]}
+if [ $1 ] ; then
+
+    if [ $1 = "set" ] ; then
+	if [[ $2 && $2 < $((NUM_PROJECTS + 1)) && $2 > 0 ]] ; then
+	    echo "Setting directory for project" $2
+	    P_DIR_LIST[$(($2 - 1))]=$(pwd)
+	else
+	    display-error $(echo "Project number undefined." "Should be between 1 and" $NUM_PROJECTS)
+	fi
+    fi
+    
+    if [[ $1 -eq $1 && $1 < $((NUM_PROJECTS + 1)) ]] ; then
+	if [ $1 = 0 ]; then
+	    if [ && $PLAST_DIR ] ; then
+		open_project $PLAST_DIR
+	    else
+		display-error $(echo "No last project")
+	    fi
+	else
+	    open_project ${P_DIR_LIST[$(($1 - 1))]}
+	fi
+    fi
 else
-    display_help
+    display-help
 fi
 
