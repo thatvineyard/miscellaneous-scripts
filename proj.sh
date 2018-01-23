@@ -40,7 +40,7 @@ open_terminal() {
     if [ $1 ] ; then
 	case $(basename $(readlink -f $(which x-terminal-emulator))) in
 	    tilix.wrapper)
-		tilix w $1 --maximize --action=session-add-right
+		tilix -w $1 --maximize 
 		;;
 	    *)
 		x-terminal-emulator
@@ -49,13 +49,13 @@ open_terminal() {
     fi
 }
        
-open_project() {
+open-project() {
     P_DIR=$1
     
-    source cd $P_DIR
+    cd $P_DIR
     if [ $? -eq 0 ] ; then
 	
-	# emacs &
+	emacs &
 	open_terminal $P_DIR &
 	
 	if git rev-parse --git-dir > /dev/null 2>&1; then
@@ -72,7 +72,7 @@ open_project() {
 
 	if [ ${P_GIT}] ; then
 	    # git config --local --get remote.origin.url | xargs -I {} $BROWSER {} &
-	    git pull &
+	    ( cd $P_DIR; git pull )
 	fi
 
 	ls -l
@@ -102,12 +102,12 @@ if [ $1 ] ; then
     if [[ $1 -eq $1 && $1 < $((NUM_PROJECTS + 1)) ]] ; then
 	if [ $1 = 0 ]; then
 	    if [ $PLAST_DIR ] ; then
-		open_project $PLAST_DIR
+		open-project $PLAST_DIR
 	    else
 		display-error $(echo "No last project")
 	    fi
 	else
-	    cd ${P_DIR_LIST[$(($1 - 1))]}
+	    open-project ${P_DIR_LIST[$(($1 - 1))]}
 	fi
     fi
 else
