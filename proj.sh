@@ -4,7 +4,7 @@
 # This function uses display-error which is also a script in the miscellaneous scripts pack. 
 
 ## VARIABLES
-P_DIR_LIST=(/home/carl/Documents/UU/AD2/Assignments/ /home/carl/Documents/UU/AD2/)
+P_DIR_LIST=(/home/carl/Documents/UU/AD3/AD3-Assignments/ /usr/local/bin/miscellaneous-scripts)
 NUM_PROJECTS=${#P_DIR_LIST[@]}
 BROWSER= 
 
@@ -40,7 +40,7 @@ open_terminal() {
     if [ $1 ] ; then
 	case $(basename $(readlink -f $(which x-terminal-emulator))) in
 	    tilix.wrapper)
-		x-terminal-emulator -w $1 --maximize --action=session-add-right
+		tilix w $1 --maximize --action=session-add-right
 		;;
 	    *)
 		x-terminal-emulator
@@ -51,8 +51,8 @@ open_terminal() {
        
 open_project() {
     P_DIR=$1
-
-    cd $P_DIR &> /dev/null
+    
+    source cd $P_DIR
     if [ $? -eq 0 ] ; then
 	
 	# emacs &
@@ -70,7 +70,7 @@ open_project() {
 	    P_GIT= false
 	fi
 
-	if [ ${P_GIT} = true ] ; then
+	if [ ${P_GIT}] ; then
 	    # git config --local --get remote.origin.url | xargs -I {} $BROWSER {} &
 	    git pull &
 	fi
@@ -101,13 +101,13 @@ if [ $1 ] ; then
     
     if [[ $1 -eq $1 && $1 < $((NUM_PROJECTS + 1)) ]] ; then
 	if [ $1 = 0 ]; then
-	    if [ && $PLAST_DIR ] ; then
+	    if [ $PLAST_DIR ] ; then
 		open_project $PLAST_DIR
 	    else
 		display-error $(echo "No last project")
 	    fi
 	else
-	    open_project ${P_DIR_LIST[$(($1 - 1))]}
+	    cd ${P_DIR_LIST[$(($1 - 1))]}
 	fi
     fi
 else
