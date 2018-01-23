@@ -16,3 +16,16 @@ Lists the available projects.
 proj X
 
 Opens the project at number X. 
+
+## display-error
+A small script to format errors. It uses fold to wrap the errors so they are more readable. Unfortunately it does not allow newlines in the error message, but I will look into it.
+
+### Usage
+
+display-error
+
+displays the error box with a generic error message
+
+display-error [error message]
+
+displays the error box with the error message within it. 
