@@ -1,7 +1,8 @@
 #!/bin/bash
 
 ## DEPENDENCY
-# This function uses display-error which is also a script in the miscellaneous scripts pack. 
+# display-error (included in miscellaneous scripts pack)
+# run-in-temp-terminal (included in miscellaneous scripts pack)
 
 ## VARIABLES
 P_DIR_LIST=(/home/carl/Documents/UU/AD3/AD3-Assignments/ /usr/local/bin/miscellaneous-scripts)
