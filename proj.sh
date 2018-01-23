@@ -36,6 +36,20 @@ display-help() {
     echo "===================================================="
 }
 
+handle-git() {
+    if git rev-parse --git-dir > /dev/null 2>&1; then
+	# This is a valid git repository (but the current working
+	# directory may not be the top level.
+	# Check the output of the git rev-parse command if you care)
+	echo "Valid git repo"
+	P_GIT= true
+	git pull -q --no-commit
+    else
+	# this is not a git repository
+	echo "Not a git repo"
+    fi    
+}
+
 open_terminal() {
     if [ $1 ] ; then
 	case $(basename $(readlink -f $(which x-terminal-emulator))) in
@@ -58,27 +72,9 @@ open-project() {
 	emacs &
 	open_terminal $P_DIR &
 	
-	if git rev-parse --git-dir > /dev/null 2>&1; then
-	    # This is a valid git repository (but the current working
-	    # directory may not be the top level.
-	    # Check the output of the git rev-parse command if you care)
-	    echo "Valid git repo"
-	    P_GIT= true
-	else
-	    # this is not a git repository
-	    echo "Not a git repo"
-	    P_GIT= false
-	fi
-
-	if [ ${P_GIT}] ; then
-	    # git config --local --get remote.origin.url | xargs -I {} $BROWSER {} &
-	    ( cd "${P_DIR}" ; git pull )
-	fi
-
-	ls -l
-
+       	ls -l
+	
 	export PLAST_DIR=$P_DIR;
-	export PLAST_GIT=$P_GIT;
 
     else
 	display-error $(echo "Changing directory unsuccessful, please verify that project directory exists" "Project directory:" $P_DIR)
