@@ -50,7 +50,16 @@ handle-git() {
     fi    
 }
 
+## open_terminal dir
+# parameters:
+# dir - the directory which the terminal will open to. 
+#
+# This function checks the default terminal and launches it
+# accordingly. Right now will only act differently with the 
+# Tilix terminal. 
+
 open_terminal() {
+
     if [ $1 ] ; then
 	case $(basename $(readlink -f $(which x-terminal-emulator))) in
 	    tilix.wrapper)
