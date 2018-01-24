@@ -79,7 +79,7 @@ open-project() {
 	
 	emacs &
 	open_terminal $P_DIR &
-	
+	handle-git
 	# export PLAST_DIR=$P_DIR;
 
     else
