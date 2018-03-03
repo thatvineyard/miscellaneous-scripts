@@ -5,7 +5,7 @@
 # run-in-temp-terminal (included in miscellaneous scripts pack)
 
 ### VARIABLES
-P_DIR_LIST=(/home/carl/Documents/UU/AD3/AD3-Assignments/ /usr/local/bin/miscellaneous-scripts)
+P_DIR_LIST=(/home/carl/Documents/UU/AD3/AD3-Assignments/ /home/carl/Documents/Programming/booth-server/)
 NUM_PROJECTS=${#P_DIR_LIST[@]}
 BROWSER= 
 
