@@ -10,7 +10,7 @@ bashsettingsgit=git@github.com:/thatvineyard/.bashrc.git
 
 
 miscscriptsdir=/usr/local/bin/miscellaneous-scripts
-miscscriptsgit=git@github.com:/miscellaneous-scripts.git
+miscscriptsgit=git@github.com:/thatvineyard/miscellaneous-scripts.git
 
 
 header="######## INSTALLER SCRIPT ##########"
@@ -38,11 +38,13 @@ install_code() {
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
     sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
     sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+    sudo apt update
     sudo apt -qq install -y code
 }
 
 install_programs() {
     print_message "Installing git, emacs and code"
+    install_code
     sudo apt -qq install -y git emacs
 }
 
@@ -96,7 +98,7 @@ configure() {
 
 download_misc() {
     print_message "downloading miscellaneous scripts"
-    git clone $miscscriptsgit $miscscriptsdir
+    sudo git clone $miscscriptsgit $miscscriptsdir
 }
 
     
