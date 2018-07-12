@@ -5,7 +5,7 @@ emacssettingsdir=$HOME/.emacs.d/
 emacssettingsgit=git@github.com:/thatvineyard/.emacs.d.git 
 
 
-bashsettingsdir=$HOME/.bashrc.d-test/
+bashsettingsdir=$HOME/.bashrc.d/
 bashsettingsgit=git@github.com:/thatvineyard/.bashrc.git 
 
 
@@ -29,13 +29,21 @@ print_message() {
 
 install_updateupgrade() {
     print_message "Update and upgrade full system"
-    sudo apt update
-    sudo apt upgrade
+    sudo apt update -y
+    sudo apt upgrade -y
+}
+
+install_code() {
+    print_message "Setting up code repository"
+    curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+    sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+    sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+    sudo apt -qq install -y code
 }
 
 install_programs() {
     print_message "Installing git, emacs and code"
-    sudo apt -qq install -y git emacs code
+    sudo apt -qq install -y git emacs
 }
 
 install() {
