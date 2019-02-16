@@ -5,8 +5,8 @@ topline="================ Error =================\n"
 startmainline="\t"
 endmainline=""
 
-
-
+file=false
+pipe=false
 messagewidth=40
 terminalwidth=60
 linespacing=2
@@ -53,15 +53,57 @@ function print_tail {
 }
 
 function print_main {
-  
+    file=$1
+    shift
+    pipe=$1
+    shift
+
+    
     if [[ $terminalwidth -gt $messagewidth ]]; then 
 	prefixlength=$((($terminalwidth - $messagewidth) / 2))
 	prefix=$(eval printf "%0.s' '" {1..$prefixlength})
     else
 	prefix=''
     fi
-    
-    fold -s --width $messagewidth <<< $@ |  sed "s/^/$prefix/"
+
+    if [[ $messagewidth -ne 0 ]]; then
+	if [[ $file = true ]]; then
+	    if [[ $pipe = true ]]; then
+		while read -r line ; do
+		    fold -s --width $messagewidth $line |  sed "s/^/$prefix/"
+		done
+	    fi
+	    while test $# -gt 0; do
+  		fold -s --width $messagewidth $1 |  sed "s/^/$prefix/"
+		shift
+	    done
+	elif [[ $pipe = true ]]; then
+	    while read -r line ; do
+		fold -s --width $messagewidth <<< $line |  sed "s/^/$prefix/"
+	    done
+	else
+	    fold -s --width $messagewidth <<< $@ |  sed "s/^/$prefix/"
+	fi
+    else
+	if [[ $file = true ]]; then
+	    if [[ $pipe = true ]]; then
+		while read -r line ; do
+		    cat $line |  sed "s/^/$prefix/"
+		done
+	    fi
+	    while test $# -gt 0; do
+  		cat $1 |  sed "s/^/$prefix/"
+		shift
+	    done
+	elif [[ $pipe = true ]]; then
+	    while read -r line ; do
+		echo $line |  sed "s/^/$prefix/"
+	    done
+	else
+	    echo $@ |  sed "s/^/$prefix/"
+	fi
+    fi
+	   
 }
 
 function print_header {
@@ -73,12 +115,20 @@ function print_header {
     shift
     header=$1
     shift
+    file=$1
+    shift
+    pipe=$1
+    shift
     
     print_top $header $character $terminalwidth
-    print_main $@
+    print_main $file $pipe $@
     print_tail $character $terminalwidth
 }
 
+
+if [ ! -t 0 ]; then
+    pipe=true
+fi
 
 while test $# -gt 0; do
     case "$1" in
@@ -143,9 +193,14 @@ while test $# -gt 0; do
 	    fi
 	    shift
 	    ;;
+	-f)
+	    shift
+	    file=true	    
+	    ;;
 	*)
-	    print_header $character $messagewidth $terminalwidth $header $@
 	    break
 	    ;;
     esac
 done
+
+print_header $character $messagewidth $terminalwidth $header $file $pipe $@
