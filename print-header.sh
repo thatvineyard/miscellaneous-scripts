@@ -12,6 +12,7 @@ terminalwidth=60
 linespacing=2
 character=\=
 header=Message
+spacingperside=2
 
 strU8DiffLen () {
     local bytlen oLang=$LANG
@@ -25,17 +26,20 @@ strU8DiffLen () {
 
 function print_top {
     messagelength=$(echo $1 | wc -c)
-    marginalperside=2
 
     offset=$(((messagelength + marginalperside + $3 + 1) % 2))
-    leftsidelength=$((($3 / 2) - ($messagelength / 2) - $marginalperside))
-    rightsidelength=$((($3 / 2) - ($messagelength / 2) - $marginalperside + $offset))
+    leftsidelength=$((($3 / 2) - ($messagelength / 2) - $spacingperside))
+    rightsidelength=$((($3 / 2) - ($messagelength / 2) - $spacingperside + $offset))
 
-    
+
     eval printf "%0.s$2" {1..$leftsidelength}
-    eval printf "%0.s' '" {1..$marginalperside}
+    if [[ $spacingperside -ne 0 ]] ; then 
+	eval printf "%0.s' '" {1..$spacingperside}
+    fi
     printf $1
-    eval printf "%0.s' '" {1..$marginalperside}
+    if [[ $spacingperside -ne 0 ]] ; then 
+	eval printf "%0.s' '" {1..$spacingperside}
+    fi
     eval printf "%0.s$2" {1..$rightsidelength}
     printf "\n"
     for i in $(seq 1 $linespacing); do
@@ -189,6 +193,16 @@ while test $# -gt 0; do
 		character=$1
 	    else
 		echo "Chacter required after '-c' flag"
+		exit 1
+	    fi
+	    shift
+	    ;;
+	-s)
+	    shift
+	    if test $# -gt 0; then
+		spacingperside=$1
+	    else
+		echo "Number required after '-s' flag"
 		exit 1
 	    fi
 	    shift
