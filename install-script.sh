@@ -348,8 +348,9 @@ configure() {
 download_misc_scripts() {
     user=$whoami
     print_message "downloading miscellaneous scripts"
-    initialize_remote_git_in_directory $miscscriptsgit $miscscriptsdir
+    sudo mkdir $miscscriptsdir
     sudo chown $user:$user $miscscriptsdir
+    initialize_remote_git_in_directory $miscscriptsgit $miscscriptsdir
 }
 
 ## download
