@@ -247,7 +247,7 @@ configure_bash() {
 configure_vscode() {
     print_message "Configuring code"
 
-    initalize_remote_git_in_directory $codesettingsgit $codesettingsdir
+    initialize_remote_git_in_directory $codesettingsgit $codesettingsdir
 
     if [ $? -eq 0 ]; then
         print_message "Initializing git repository for code failed"
@@ -261,7 +261,7 @@ configure_vscode() {
 configure_emacs() {
     print_message "Configuring emacs"
 
-    initalize_remote_git_in_directory $emacssettingsgit $emacssettingsdir
+    initialize_remote_git_in_directory $emacssettingsgit $emacssettingsdir
 
     if [ $? -eq 0 ]; then
         print_message "Initializing git repository for emacs failed"
@@ -348,7 +348,7 @@ configure() {
 download_misc_scripts() {
     user=$whoami
     print_message "downloading miscellaneous scripts"
-    sudo git clone $miscscriptsgit $miscscriptsdir
+    initialize_remote_git_in_directory $miscscriptsgit $miscscriptsdir
     sudo chown $user:$user $miscscriptsdir
 }
 
