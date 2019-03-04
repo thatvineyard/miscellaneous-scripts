@@ -176,7 +176,7 @@ configure_git() {
 # $1 git repository URL
 # $2 directory to initialize in
 #
-initalize_remote_git_in_existing_directory() {
+initialize_remote_git_in_existing_directory() {
     if [ $# -eq 2 ]; then
         previous_directory=pwd
         cd $2
@@ -218,10 +218,10 @@ initialize_remote_git_in_new_directory() {
 initialize_remote_git_in_directory() {
     if [ -d "$2" ]; then 
         print_message "$2 already exists, initializing into repo"
-        initalize_remote_git_in_existing_directory $1 $2
+        initialize_remote_git_in_existing_directory $1 $2
     else
         print_message "$2 does not exist, cloning repo"
-        initalize_remote_git_in_new_directory $1 $2
+        initialize_remote_git_in_new_directory $1 $2
     fi
 }
 
