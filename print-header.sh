@@ -5,6 +5,9 @@ topline="================ Error =================\n"
 startmainline="\t"
 endmainline=""
 
+printtop=true
+printbot=true
+
 file=false
 pipe=false
 messagewidth=40
@@ -123,10 +126,14 @@ function print_header {
     shift
     pipe=$1
     shift
-    
-    print_top $header $character $terminalwidth
+
+    if [[ $printtop = true ]] ; then     
+	print_top $header $character $terminalwidth
+    fi
     print_main $file $pipe $@
-    print_tail $character $terminalwidth
+    if [[ $printbot = true ]] ; then     
+	print_tail $character $terminalwidth
+    fi
 }
 
 
@@ -150,7 +157,7 @@ while test $# -gt 0; do
 	-H)
 	    shift
 	    if test $# -gt 0; then
-		header=$1
+		header="$1"
 	    else
 		echo "Header required after '-H' flag"
 		exit 1
@@ -190,7 +197,7 @@ while test $# -gt 0; do
 	-c)
 	    shift
 	    if test $# -gt 0; then
-		character=$1
+		character="$1"
 	    else
 		echo "Chacter required after '-c' flag"
 		exit 1
@@ -206,6 +213,11 @@ while test $# -gt 0; do
 		exit 1
 	    fi
 	    shift
+	    ;;
+	-n)
+	    shift
+	    printtop=false
+	    printbot=false
 	    ;;
 	-f)
 	    shift
