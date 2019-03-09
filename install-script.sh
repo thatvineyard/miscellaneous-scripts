@@ -123,8 +123,14 @@ install_code() {
 # Installs git, emacs, curl and tilix. 
 #
 install_programs() {
-    print_message "Installing git, emacs, curl and tilix"
-    sudo apt -qq install -y git emacs curl tilix
+    programs=""
+    programs="$programs git"
+    programs="$programs emacs"
+    programs="$programs curl"
+    programs="$programs tilix"
+    programs="$programs net-tools"
+    print_message "Installing $programs"
+    sudo apt -qq install -y $programs
 }
 
 ## install
