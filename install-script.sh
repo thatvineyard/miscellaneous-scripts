@@ -22,6 +22,16 @@
 
 
 #------------------------------------------------------------------------------
+# Globals
+#------------------------------------------------------------------------------
+#
+# Global settings
+#
+#------------------------------------------------------------------------------
+
+graphics=true
+
+#------------------------------------------------------------------------------
 # Directories, repos, urls
 #------------------------------------------------------------------------------
 #
@@ -118,13 +128,31 @@ install_code() {
     sudo apt -qq install -y code
 }
 
+## install_terminal_programs
+# 
+# Installs git, emacs, curl, net-tools and zsh. 
+#
+install_terminal_programs() {
+    programs=""
+    programs="$programs git"
+    programs="$programs emacs"
+    programs="$programs curl"
+    programs="$programs net-tools"
+    programs="$programs zsh"
+    print_message "Installing terminal apps: $programs"
+    sudo apt -qq install -y $programs
+}
+
 ## install_programs
 # 
 # Installs git, emacs, curl and tilix. 
 #
-install_programs() {
-    print_message "Installing git, emacs, curl and tilix"
-    sudo apt -qq install -y git emacs curl tilix
+install_graphic_programs() {
+    programs=""
+    programs="$programs fira-code"
+    programs="$programs tilix"
+    print_message "Installing graphics apps: $programs"
+    sudo apt -qq install -y $programs
 }
 
 ## install
@@ -135,8 +163,11 @@ install() {
     print_header "Updating, upgrading and installing programs"
 
     install_updateupgrade
-    install_programs
-    install_code
+    install_terminal_programs
+    if [[ $graphics -eq "true" ]] ; then 
+	install_graphic_programs
+	install_code
+    fi
     
     print_message "Installation complete"
 }
@@ -178,7 +209,7 @@ configure_git() {
 #
 initialize_remote_git_in_existing_directory() {
     if [ $# -eq 2 ]; then
-        previous_directory=pwd
+        previous_directory=$(pwd)
         cd $2
 
         if [[ $? -eq 0 ]]; then
@@ -317,7 +348,6 @@ configure_terminal() {
     print_message "Configuring terminal"
 
     sudo update-alternatives --config x-terminal-emulator
-
 }
 
 ## configure
@@ -329,10 +359,13 @@ configure() {
 
     configure_git
     configure_bash
-    configure_vscode
     configure_emacs
-    #configure_background_images
     configure_terminal
+
+    if [[ $graphics -eq "true" ]] ; then
+	configure_vscode
+	#configure_background_images
+    fi
 
     print_message "Configuration complete"
 }
@@ -372,8 +405,7 @@ download() {
 # The main script.
 #
 #------------------------------------------------------------------------------
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ] ; then
     install
     configure
     download
