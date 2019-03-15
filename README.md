@@ -13,6 +13,8 @@ A collection of miscellaneous scripts which are too small to be their own projec
     - [Usage](#usage-3)
   - [proj](#proj)
     - [Usage](#usage-4)
+  - [pick-directory](#pick-directory)
+    - [Usage](#usage-5)
 
 ## install-script
 An installer script. Constist of three steps: install, configure, download. 
@@ -93,4 +95,15 @@ Lists the available projects.
 
 proj X
 
-Opens the project at number X. 
+Opens the project at number X.
+
+## pick-directory
+
+List all directories in a location which match a search term and then allow user input to quickly navigate there. 
+
+### Usage
+
+`pick-directory ~/foo ba`
+` 1: ~/foo/bar/`
+` 2: ~/foo/baz/`
+** picking a number will then cd to that directory **
