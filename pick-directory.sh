@@ -3,7 +3,7 @@
 
 # Input validation
 if [ $# -lt 1 ] ; then
-    echo "Must have at least a directory to search"
+    echo "Must include a directory to search"
     exit 
 fi
 
@@ -14,14 +14,38 @@ else
     exit 
 fi
 
+
+
+
 if [ "$2" != "" ] ; then
     search=$2
 else
     search="*"
 fi
 
-echo "searching for $search in directory"
+echo "Searching for $search in directory"
 
+# List directories
+number=1
+ls -1d $1/*/ | while read line ; do
+    if [[ "$line" =~ "$2" ]] ; then
+        echo " $number: $line"
+        number=$((number+1))
+    fi
+done
 
-read -p "Pick a number: " number
-echo "you picked $number"
+# Get input
+read -p "Pick a number: " choice
+
+# Pick out right directory
+number=1
+ls -1d $1/*/ | while read line ; do
+    if [[ "$line" =~ "$2" ]] ; then
+        if [[ $number == $choice ]] ; then
+            echo "Going to $line"
+            echo "(if your diretory didn't change, add 'source' or '.' before command)"
+            cd $line
+        fi
+        number=$((number+1))
+    fi
+done
